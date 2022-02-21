@@ -13,6 +13,10 @@
         android:label="maps_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyBax-WJlUsID_bPjKZYW_ihf8_77wuJeeE"/>
+
         <activity
             android:screenOrientation="portrait"
             android:name=".MainActivity"

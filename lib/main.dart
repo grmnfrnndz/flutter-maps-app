@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:maps_app/pages/pages.dart';
-import 'package:maps_app/blocs/gps/blocs.dart';
+import 'package:maps_app/blocs/blocs.dart';
 
 void main() => runApp(StateApp());
 
@@ -14,7 +14,9 @@ class StateApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context) => GpsBloc(),)
+        BlocProvider(create: (BuildContext context) => GpsBloc(),),
+        BlocProvider(create: (BuildContext context) => LocationBloc(),),
+        BlocProvider(create: (BuildContext context) => MapBloc(),),
       ],
       child: const MyApp());
   }

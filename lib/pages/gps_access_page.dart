@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:maps_app/blocs/gps/blocs.dart';
+import 'package:maps_app/blocs/blocs.dart';
 
 class GpsAccessPage extends StatelessWidget {
 
