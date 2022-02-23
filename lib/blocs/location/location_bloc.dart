@@ -16,8 +16,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   LocationBloc() : super(const LocationState()) {
 
 
-    on<OnStartFollowinfUser>((event, emit) => emit(state.copyWith(followingUser: true)));
-    on<OnStopFollowinfUser>((event, emit) => emit(state.copyWith(followingUser: false)));
+    on<OnStartFollowingUser>((event, emit) => emit(state.copyWith(followingUser: true)));
+    on<OnStopFollowingUser>((event, emit) => emit(state.copyWith(followingUser: false)));
 
     on<OnNewUserLocationEvent>((event, emit) {
       // la variable state existe dentro de todo el bloc
@@ -32,7 +32,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
   Future<LatLng> getCurrentPosition() async {
     final position = await Geolocator.getCurrentPosition();
-
     final position_x = LatLng(position.latitude, position.longitude);
 
     add(OnNewUserLocationEvent(position_x));
@@ -42,7 +41,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   }
 
   void startFollowingUser(){
-    add(OnStartFollowinfUser());
+    add(OnStartFollowingUser());
     
     print('startFollowingUser');
       positionStream = Geolocator.getPositionStream().listen((event) { 
@@ -52,10 +51,10 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   }
 
   void stopFollowingUser(){
-    add(OnStopFollowinfUser());
+    add(OnStopFollowingUser());
     
     positionStream?.cancel();
-    print('stopFollowingUser');
+    print('OnStopFollowingUser');
   }
 
   @override

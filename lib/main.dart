@@ -16,7 +16,7 @@ class StateApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (BuildContext context) => GpsBloc(),),
         BlocProvider(create: (BuildContext context) => LocationBloc(),),
-        BlocProvider(create: (BuildContext context) => MapBloc(),),
+        BlocProvider(create: (BuildContext context) => MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context)),),
       ],
       child: const MyApp());
   }

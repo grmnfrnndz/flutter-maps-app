@@ -13,8 +13,8 @@ class OnNewUserLocationEvent extends LocationEvent {
 }
 
 
-class OnStartFollowinfUser extends LocationEvent {}
-class OnStopFollowinfUser extends LocationEvent {}
+class OnStartFollowingUser extends LocationEvent {}
+class OnStopFollowingUser extends LocationEvent {}
 
 
 

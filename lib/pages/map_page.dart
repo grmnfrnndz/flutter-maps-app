@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:maps_app/blocs/blocs.dart';
 import 'package:maps_app/views/views.dart';
@@ -36,20 +37,32 @@ class _MapsPageState extends State<MapsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
      body: BlocBuilder<LocationBloc, LocationState>(
-       builder: (context, state) {
+       builder: (context, locationState) {
 
-        if (state.lastKnowLocation == null) return const Center(child: Text('Espere por favor...'));
+        if (locationState.lastKnowLocation == null) return const Center(child: Text('Espere por favor...'));
 
-        return SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Stack(
-            children: [
-              MapsView(initialLocation: state.lastKnowLocation!,),
-        
-              // TODO: implementar botones...
-        
-            ],
-          ),
+        return BlocBuilder<MapBloc, MapState>(
+          builder: (context, mapState) {
+
+            Map<String, Polyline> polylines = Map.from(mapState.polylines);
+            if (!mapState.showMyRoute) {
+              polylines.removeWhere((key, value) => key == 'myRoute');
+            }
+
+            return SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Stack(
+                    children: [
+                      MapsView(initialLocation: locationState.lastKnowLocation!,
+                        polylines: polylines.values.toSet(),
+                        ),
+                
+                      // TODO: implementar botones...
+                
+                    ],
+                  ),
+                );
+          },
         );
        },
      ),
@@ -57,7 +70,9 @@ class _MapsPageState extends State<MapsPage> {
      floatingActionButton: Column(
        mainAxisAlignment: MainAxisAlignment.end,
        children: [
-          BtnCurrentLocation()
+         BtnToggleUserRoute(),
+          BtnFolllowUser(),
+          BtnCurrentLocation(),
        ],
      ),
    );
