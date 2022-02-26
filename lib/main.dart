@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maps_app/pages/pages.dart';
 import 'package:maps_app/blocs/blocs.dart';
 
+import 'services/traffic_service.dart';
+
 void main() => runApp(StateApp());
 
 
@@ -17,6 +19,7 @@ class StateApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => GpsBloc(),),
         BlocProvider(create: (BuildContext context) => LocationBloc(),),
         BlocProvider(create: (BuildContext context) => MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context)),),
+        BlocProvider(create: (BuildContext context) => SearchBloc(trafficService: TrafficService()),),
       ],
       child: const MyApp());
   }

@@ -58,7 +58,8 @@ class _MapsPageState extends State<MapsPage> {
                         ),
                 
                       // TODO: implementar botones...
-                
+                      const SearchBar(),
+                      ManualMarker(),
                     ],
                   ),
                 );
@@ -70,7 +71,7 @@ class _MapsPageState extends State<MapsPage> {
      floatingActionButton: Column(
        mainAxisAlignment: MainAxisAlignment.end,
        children: [
-         BtnToggleUserRoute(),
+          BtnToggleUserRoute(),
           BtnFolllowUser(),
           BtnCurrentLocation(),
        ],
