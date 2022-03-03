@@ -8,11 +8,15 @@ import '../models/models.dart';
 class TrafficService {
 
   final Dio _dioTraffic;
+  final Dio _dioPlaces;
 
 
   final String _baseTrafficUrl = 'https://api.mapbox.com/directions/v5/mapbox';
+  final String _basePlacesUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
 
-  TrafficService(): _dioTraffic = Dio()..interceptors.add(TrafficInterceptor());
+  TrafficService()
+    : _dioTraffic = Dio()..interceptors.add(TrafficInterceptor()),
+    _dioPlaces = Dio()..interceptors.add(PlacesInterceptor());
 
 
   Future<TrafficResponse> getCoordsStartToEnd(LatLng start, LatLng end) async {
@@ -24,6 +28,21 @@ class TrafficService {
       return data;
   }
 
+  Future<List<Feature>> getResultsByQuery(LatLng proximity, String query) async {
+
+    if (query.isEmpty) return [];
+    
+    final url = '$_basePlacesUrl/$query.json';
+
+    final response = await _dioPlaces.get(url, queryParameters: {
+      'proximity': '${proximity.longitude},${proximity.latitude}'
+    });
+
+    final placesResponse = PlacesResponse.fromJson(response.data);
+
+    return placesResponse.features;
+
+  }
 
 
 }

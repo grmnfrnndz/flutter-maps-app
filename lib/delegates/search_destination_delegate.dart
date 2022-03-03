@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maps_app/blocs/blocs.dart';
 
 import '../models/models.dart';
 
@@ -35,12 +38,54 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   @override
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
-    return Text('buildResults');
+
+
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    searchBloc.getPlacesByQuery(locationBloc.state.lastKnowLocation!, query);
+
+
+
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        final places = state.places;
+
+        return ListView.separated(
+          itemBuilder: (context, i) {
+            final place = places[i];
+            return ListTile(
+              title: Text('$place.text'),
+              subtitle: Text('$place.placeName'),
+              leading: const Icon(Icons.place_outlined, color: Colors.black),
+              onTap: () {
+                print('enviar este lugar $place');
+
+                final result = SearchResult(
+                  cancel: false,
+                  manual: false,
+                  position: LatLng(place.center[1], place.center[0]),
+                  name: place.text,
+                  description: place.placeName
+                );
+                
+                searchBloc.add(AddToHistory(place));
+
+                close(context, result);
+              },
+            );
+          }, 
+          separatorBuilder: (context, i) => const Divider(), 
+          itemCount: places.length);
+      },
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildSuggestions
+
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+
     return ListView(
       children: [
         ListTile(
@@ -55,6 +100,28 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
           },
           ),
           
+
+          ...searchBloc.state.history.map((place) => ListTile(
+            title: Text('$place.text'),
+              subtitle: Text('$place.placeName'),
+              leading: const Icon(Icons.history_outlined, color: Colors.black),
+              onTap: () {
+                print('enviar este lugar $place');
+
+                final result = SearchResult(
+                  cancel: false,
+                  manual: false,
+                  position: LatLng(place.center[1], place.center[0]),
+                  name: place.text,
+                  description: place.placeName
+                );
+                
+                close(context, result);
+              },
+            )
+          ).toList()
+          ,
+
       ],
     );
   }

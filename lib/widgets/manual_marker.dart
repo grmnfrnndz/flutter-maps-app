@@ -71,19 +71,14 @@ class _ManualMarkerBody extends StatelessWidget {
                 height: 50,
                 shape: StadiumBorder(),
                 onPressed: () async {
+                  final start = locationBloc.state.lastKnowLocation;
+                  if (start == null) return;
 
-                    // TODO: loading
-
-                    final start = locationBloc.state.lastKnowLocation;
-                    if (start == null) return;
-
-                    final end = mapBloc.mapCenter;
-                  
+                  final end = mapBloc.mapCenter;
+                
                   if (end == null) return;
 
                   showLoadingMessage(context);
-
-                  
 
                   final routeDestination = await searchBloc.getCoordsStartToEnd(start, end);
                   await mapBloc.drawRoutePolyline(routeDestination);
