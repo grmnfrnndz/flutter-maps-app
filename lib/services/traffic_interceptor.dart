@@ -2,7 +2,7 @@
 
 import 'package:dio/dio.dart';
 
-const accessToken = 'pk.eyJ1IjoiZ2VybWFuZGV2b3BzIiwiYSI6ImNsMDQwN3V2ZDFqNWszaGxzMjFveXMxMWkifQ.9ykWyp0zKVf8jjsgeA-NpA';
+const accessToken = 'API_KEY';
 
 
 class TrafficInterceptor extends Interceptor{

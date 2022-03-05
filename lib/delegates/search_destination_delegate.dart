@@ -26,8 +26,6 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
     return IconButton(
       icon: Icon(Icons.arrow_back_ios),
       onPressed: () {
-        // TODO: se debe retornar algo no null
-
 
         final result = SearchResult(cancel: true);
 
@@ -37,14 +35,10 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-
 
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     searchBloc.getPlacesByQuery(locationBloc.state.lastKnowLocation!, query);
-
-
 
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
@@ -82,8 +76,6 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-
     final searchBloc = BlocProvider.of<SearchBloc>(context);
 
     return ListView(
@@ -92,7 +84,6 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
           leading: const Icon(Icons.location_on_outlined, color: Colors.black),
           title: const Text('Colocar la Ubicacion manualmente', style: TextStyle(color: Colors.black)),
           onTap: () {
-            // TODO: regresar algo
 
             final result = SearchResult(cancel: false, manual: true);
 
@@ -106,7 +97,6 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
               subtitle: Text('$place.placeName'),
               leading: const Icon(Icons.history_outlined, color: Colors.black),
               onTap: () {
-                print('enviar este lugar $place');
 
                 final result = SearchResult(
                   cancel: false,

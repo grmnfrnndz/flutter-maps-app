@@ -9,6 +9,8 @@ import 'package:maps_app/blocs/blocs.dart';
 import 'package:maps_app/models/models.dart';
 import 'package:maps_app/themes/themes.dart';
 
+import '../../helpers/helpers.dart';
+
 part 'map_event.dart';
 part 'map_state.dart';
 
@@ -30,7 +32,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnStopFollowingUserEvent>((event, emit) => emit(state.copyWith(isFollowingUser: false)));
     on<UpdateUserPolylinesEvent>(_onPolylinesNewPoint);
     on<OnToggleUserRoute>((event, emit) => emit(state.copyWith(showMyRoute: !state.showMyRoute)));
-    on<DisplayPolylinesEvent>((event, emit) => emit(state.copyWith(polylines: event.polylines)));
+    on<DisplayPolylinesEvent>((event, emit) => emit(state.copyWith(polylines: event.polylines, markers: event.markers)));
 
 
     locationStateSuscription = locationBloc.stream.listen((locationState) {
@@ -104,16 +106,63 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
 
 
+    double kms = destination.distance / 1000;
+    kms = (kms * 100).floorToDouble();
+    kms /= 100;
+
+    double tripDuration = (destination.duration / 60).floorToDouble();
+
+
+    // custom markers
+    // final iconStartMarker = await getAssetImagenMarker();
+    // final iconEndMarker = await getNetworkImageMarker();
+
+    // marker from widgets
+    final iconStartMarker = await getStartCustomMarker(tripDuration.toInt(), 'Mi origen');
+    final iconEndMarker = await getEndCustomMarker(kms.toInt(), destination.endPlace.placeName);
+
+
+
+    final markerIdStart = const MarkerId('start');
+    final startMarker = Marker(
+      markerId: markerIdStart,
+      position: destination.points.first,
+      anchor: const Offset(0, 0.8),
+      icon: iconStartMarker,
+      infoWindow: InfoWindow(
+        title: 'Inicio',
+        snippet: 'Kms: $kms, duration: $tripDuration'
+      )
+
+    );
+
+    final endMarker = Marker(
+      markerId: const MarkerId('end'),
+      position: destination.points.last,
+      icon: iconEndMarker,
+      
+      infoWindow: InfoWindow(
+        title: destination.endPlace.text,
+        snippet: destination.endPlace.placeName,
+      )
+    );
+
+
   // se crea una copia
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['route'] = myRoute;
 
 
-    add(DisplayPolylinesEvent(currentPolylines));
+    final currentMarkers = Map<String, Marker>.from(state.markers);
+    currentMarkers['start'] = startMarker;
+    currentMarkers['end'] = endMarker;
 
 
+    add(DisplayPolylinesEvent(currentPolylines, currentMarkers));
+
+    await Future.delayed(const Duration(milliseconds: 300));
+    _mapController?.showMarkerInfoWindow(markerIdStart);
   }
-
 
   @override
   Future<void> close() {

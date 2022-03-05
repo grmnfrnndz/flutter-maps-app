@@ -45,8 +45,10 @@ class _MapsPageState extends State<MapsPage> {
           builder: (context, mapState) {
 
             Map<String, Polyline> polylines = Map.from(mapState.polylines);
+            Map<String, Marker> markers = Map.from(mapState.markers);
             if (!mapState.showMyRoute) {
               polylines.removeWhere((key, value) => key == 'myRoute');
+              markers.removeWhere((key, value) => key == 'start');
             }
 
             return SingleChildScrollView(
@@ -55,6 +57,7 @@ class _MapsPageState extends State<MapsPage> {
                     children: [
                       MapsView(initialLocation: locationState.lastKnowLocation!,
                         polylines: polylines.values.toSet(),
+                        markers: markers.values.toSet(),
                         ),
                 
                       // TODO: implementar botones...

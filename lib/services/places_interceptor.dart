@@ -12,7 +12,7 @@ class PlacesInterceptor extends Interceptor {
         'country': 'cl',
         'language': 'es',
         'access_token': accessToken,
-        'limit': 7
+        // 'limit': 7
       });
 
     super.onRequest(options, handler);

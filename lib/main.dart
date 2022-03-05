@@ -6,7 +6,7 @@ import 'package:maps_app/blocs/blocs.dart';
 
 import 'services/traffic_service.dart';
 
-void main() => runApp(StateApp());
+void main() => runApp(const StateApp());
 
 
 class StateApp extends StatelessWidget {
@@ -25,7 +25,6 @@ class StateApp extends StatelessWidget {
   }
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   
@@ -36,6 +35,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: LoadingPage(),
       home: LoadingPage(),
+      // home: TestMarkerPage(),
     );
   }
 }
